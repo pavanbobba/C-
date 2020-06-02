@@ -1,0 +1,8 @@
+kernel//home/pavan/C/drivers/hello_world.ko
+kernel//home/pavan/C/drivers/wait_queue.ko
+kernel//home/pavan/C/drivers/timer_module.ko
+kernel//home/pavan/C/drivers/tasklet_module.ko
+kernel//home/pavan/C/drivers/workqueue_module.ko
+kernel//home/pavan/C/drivers/workqueue_dedicated_module.ko
+kernel//home/pavan/C/drivers/pavan_char_drv.ko
+kernel//home/pavan/C/drivers/pavan_i2c_slave_dev.ko

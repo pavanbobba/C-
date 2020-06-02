@@ -1,0 +1,1 @@
+cmd_/home/pavan/C/drivers/pavan_i2c_slave_dev.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/pavan/C/drivers/pavan_i2c_slave_dev.ko /home/pavan/C/drivers/pavan_i2c_slave_dev.o /home/pavan/C/drivers/pavan_i2c_slave_dev.mod.o ;  true

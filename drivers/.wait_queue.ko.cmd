@@ -1,0 +1,1 @@
+cmd_/home/pavan/C/drivers/wait_queue.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/pavan/C/drivers/wait_queue.ko /home/pavan/C/drivers/wait_queue.o /home/pavan/C/drivers/wait_queue.mod.o ;  true
