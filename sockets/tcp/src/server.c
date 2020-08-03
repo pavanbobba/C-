@@ -1,20 +1,18 @@
-#include<stdio.h>
-#include<sys/types.h>
-#include<sys/stat.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include<string.h>
-#include<unistd.h>
-#include<stdlib.h>
-#include<dirent.h>
-#include<time.h>
+/***************************************************
+ * Name    : server.c
+ * 
+ * DESC    : server app
+ * 
+ * Author  : pavanbobba206@gmail.com
+*****************************************************/
+#include "comm_header.h"
 
-#define ERROR -1
-#define PORT 54321
-#define BUF_SIZE 10000
+static FILE * err_fp = NULL;
 
-void * handler(int client_fd)
+void * handler(void * fd)
 {
+	int * ptr = fd;
+	int client_fd = *ptr; 
 	char buf[BUF_SIZE], name[100];
 	int pos;
 	DIR *dir = NULL;
@@ -86,7 +84,13 @@ void * handler(int client_fd)
 				if(!chdir(name))
 				{
 					memset(buf, '\0', sizeof(buf));
-					snprintf(buf, 8, "changed");	
+					snprintf(buf, 8, "changed");
+					dir = opendir(".");
+					if(!dir)
+					{
+						perror("opendir:");
+						break;
+					}	
 				}
 				else
 				{
@@ -122,12 +126,16 @@ void * handler(int client_fd)
 			break;
 		}
 	}
+	if(closedir(dir))
+		perror("closedir:");
+	close(client_fd);
 	return NULL;
 }
 
 int main()
 {
 	int serv_fd, cli_fd, len;
+	pthread_t tid = 0;
     struct sockaddr_in serv_addr, cli_addr;
 	serv_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if(serv_fd != ERROR)
@@ -144,15 +152,23 @@ int main()
 			{
 				bzero(&cli_addr, sizeof(cli_addr));
 				len = sizeof(cli_addr);
-				cli_fd = accept(serv_fd, (struct sockaddr *)&cli_addr, (socklen_t *)&len);
-				if(cli_fd != ERROR)
+				while(1)
 				{
-					handler(cli_fd);
-					close(cli_fd);
-				}
-				else
-				{
-					perror("accept:");
+					cli_fd = accept(serv_fd, (struct sockaddr *)&cli_addr, (socklen_t *)&len);
+					if(cli_fd != ERROR)
+					{
+						if(pthread_create(&tid, NULL, &handler, (void *)&cli_fd))
+						{
+							perror("pthread_create:");
+							close(cli_fd);
+							break;
+						}
+					}
+					else
+					{
+						perror("accept:");
+						break;
+					}
 				}
 			}
 			else
@@ -169,6 +185,9 @@ int main()
 	{
 		perror("socket:");
 	}
-		
+	if(tid)
+		pthread_join(tid, NULL);
+	if(err_fp)
+		fclose(err_fp);
 	return 0;
 }

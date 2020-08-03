@@ -1,26 +1,18 @@
-#include<stdio.h>
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include <arpa/inet.h>
-#include<string.h>
-#include<unistd.h>
-
-#define ERROR -1
-#define PORT 54321
+/***************************************************
+ * Name    : client.c
+ * 
+ * DESC    : client app
+ * 
+ * Author  : pavanbobba206@gmail.com
+*****************************************************/
+#include "comm_header.h"
 
 void handler(int client_fd)
 {
-	char buf[10000];
+	char buf[BUF_SIZE];
 	
 	while(1)
 	{
-		// printf("server supports 4 commands\t"
-		//                 "pwd -> to get present working directory of server\t"
-		// 				"ls -> to get the list of contents of directory where server running\t"
-		// 				"cd <dir> -> to instruct the server to enter into a directory\t"
-		// 				"bye -> to exit the session\n");
-
 		memset(buf, '\0', sizeof(buf));
 		printf("message to server:\n\n");
 		fgets(buf, sizeof(buf), stdin);
