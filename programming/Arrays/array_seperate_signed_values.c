@@ -21,13 +21,16 @@ void seperate_pos_neg(struct Array *obj)
 	
 	while(i < j)
 	{
-		while(obj->A[i] > 0)
+		while(obj->A[i] < 0)
 			i++;
-		while(obj->A[j] < 0)
+		while(obj->A[j] > 0)
 			j--;
-		tmp = obj->A[j];
-		obj->A[j] = obj->A[i];
-		obj->A[i] = tmp;
+		if(i < j)
+		{
+			tmp = obj->A[j];
+			obj->A[j] = obj->A[i];
+			obj->A[i] = tmp;
+		}
 	}
 }
 
@@ -43,7 +46,7 @@ int main()
 	    arr.length++;
     }
     Display(arr);
-    printf("+ve and -ve numbers seperation\n....");
+    printf("+ve and -ve numbers seperation....\n");
     seperate_pos_neg(&arr);
     Display(arr);
     return 0;
